@@ -1,6 +1,7 @@
 ﻿using Api.Entidades;
 using Api.Repositorio.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 
 namespace Api.Controllers
@@ -10,9 +11,11 @@ namespace Api.Controllers
     public class LivroController:Controller
     {
         private readonly ILivroRepositorio _livroRepositorio;
-        public LivroController(ILivroRepositorio livroRepositorio)
+        private readonly ILogger _logger;
+        public LivroController(ILivroRepositorio livroRepositorio, ILogger<LivroController> logger)
         {
             _livroRepositorio = livroRepositorio;
+            _logger = logger;
         }
         [HttpPost]
         [Route("insert-book")]
@@ -20,6 +23,7 @@ namespace Api.Controllers
         {
             try 
             {
+                _logger.LogInformation("Inserindo um novo livro.");
                 return _livroRepositorio.Save(livros);
             }
             catch
